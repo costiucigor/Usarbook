@@ -51,7 +51,7 @@ let showMenu = ref(false)
                         ring-0
                         focus:ring-0
                     "
-                    placeholder="Search Facebook"
+                    placeholder="Search Usarbook"
                     type="text"
                 >
             </div>
@@ -73,20 +73,6 @@ let showMenu = ref(false)
                     class="border-b-4 border-b-blue-400 rounded-md"
                 ></div>
             </Link>
-            <button class="flex items-center justify-center h-[48px] p-1 hover:bg-[#F2F2F2] w-full rounded-lg mx-1 cursor-pointer">
-                <TelevisionPlay class="mx-auto" :size="27" fillColor="#64676B"/>
-            </button>
-            <button class="flex items-center justify-center h-[48px] p-1 hover:bg-[#F2F2F2] w-full rounded-lg mx-1 cursor-pointer">
-                <StorefrontOutline class="mx-auto" :size="27" fillColor="#64676B"/>
-            </button>
-            <button class="flex items-center justify-center h-[48px] p-1 hover:bg-[#F2F2F2] w-full rounded-lg mx-1 cursor-pointer">
-                <span class="rounded-full border-[2px] border-[#64676B] p-1">
-                    <AccountGroup class="mx-auto" :size="22" fillColor="#64676B"/>
-                </span>
-            </button>
-            <button class="flex items-center justify-center h-[48px] p-1 hover:bg-[#F2F2F2] w-full rounded-lg mx-1 cursor-pointer">
-                <ControllerClassicOutline class="mx-auto" :size="32" fillColor="#64676B"/>
-            </button>
         </div>
         <div class="flex items-center justify-end w-2/12 mr-4">
             <button class="rounded-full bg-[#E3E6EA] p-2 hover:bg-gray-300 mx-1 cursor-pointer">
