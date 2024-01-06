@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
-
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('post_id');
 
@@ -27,8 +26,7 @@ return new class extends Migration
                 ->on('users')
                 ->onDelete('cascade');
 
-            $table-text('text');
-
+            $table->text('text');
             $table->timestamps();
         });
     }
