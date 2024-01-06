@@ -34,22 +34,7 @@ const user = usePage().props.auth.user
             >
                 <div class="text-left pl-2">{{ placeholder }}</div>
             </div>
-        </div>
-
-        <div class="flex items-center py-3 border-b">
-            <button class="flex items-center justify-center p-1 hover:bg-[#F2F2F2] w-full rounded-lg mx-1 cursor-pointer">
-                <VideoImage :size="35" fillColor="#F12848"/>
-                <div class="text-[#6F7275] font-bold">Live video</div>
-            </button>
-            <button class="flex items-center justify-center p-1 hover:bg-[#F2F2F2] w-full rounded-lg mx-1 cursor-pointer">
-                <Image :size="35" fillColor="#43BE62"/>
-                <div class="text-[#6F7275] font-bold">Photo/video</div>
-            </button>
-            <button class="flex items-center justify-center p-1 hover:bg-[#F2F2F2] w-full rounded-lg mx-1 cursor-pointer">
-                <EmoticonOutline :size="35" fillColor="#F8B927"/>
-                <div class="text-[#6F7275] font-bold">Feeling/activity</div>
-            </button>
-        </div>
+        </div>.
 
     </div>
 </template>

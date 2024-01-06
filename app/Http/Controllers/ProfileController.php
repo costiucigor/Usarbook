@@ -13,6 +13,15 @@ use Inertia\Response;
 
 class ProfileController extends Controller
 {
+
+    /**
+     * Display the user's profile.
+     */
+    public function index(Request $request): Response
+    {
+        return Inertia::render('Profile/Index');
+    }
+
     /**
      * Display the user's profile form.
      */
@@ -46,12 +55,26 @@ class ProfileController extends Controller
     public function destroy(Request $request): RedirectResponse
     {
         $request->validate([
-            'password' => ['required', 'current_password'],
+            'password' => ['required', 'current-password'],
         ]);
 
         $user = $request->user();
 
         Auth::logout();
+
+        if (!empty($user->image)) {
+            $userImage = public_path() . $user->image;
+            if (file_exists($userImage)) { unlink($userImage); }
+        }
+
+        if (count($user->posts) > 0) {
+            foreach($user->posts as $post) {
+                if (!empty($post->image)) {
+                    $postImage = public_path() . $post->image;
+                    if (file_exists($postImage)) { unlink($postImage); }
+                }
+            }
+        }
 
         $user->delete();
 

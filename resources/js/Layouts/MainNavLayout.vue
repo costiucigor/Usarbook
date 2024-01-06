@@ -1,8 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
-// import CreatePostOverlay from '@/Components/CreatePostOverlay.vue'
-// import ImageDisplay from '@/Components/ImageDisplay.vue';
+import CreatePostOverlay from '@/Components/CreatePostOverlay.vue'
+import ImageDisplay from '@/Components/ImageDisplay.vue';
 
 import Magnify from 'vue-material-design-icons/Magnify.vue'
 import Home from 'vue-material-design-icons/Home.vue'
@@ -15,13 +15,13 @@ import DotsGrid from 'vue-material-design-icons/DotsGrid.vue'
 import FacebookMessenger from 'vue-material-design-icons/FacebookMessenger.vue'
 import Bell from 'vue-material-design-icons/Bell.vue'
 import Logout from 'vue-material-design-icons/Logout.vue'
-//
-// import CropperModal from '@/Components/CropperModal.vue';
+
+import CropperModal from '@/Components/CropperModal.vue';
 
 import { useGeneralStore } from '@/stores/general';
 import { storeToRefs } from 'pinia';
 const useGeneral = useGeneralStore()
-// const { isPostOverlay, isCropperModal, isImageDisplay } = storeToRefs(useGeneral)
+const { isPostOverlay, isCropperModal, isImageDisplay } = storeToRefs(useGeneral)
 
 const user = usePage().props.auth.user
 
@@ -35,7 +35,7 @@ let showMenu = ref(false)
         class="fixed z-50 w-full flex items-center justify-between h-[56px] bg-white shadow-xl border-b"
     >
         <div id="NavLeft" class="flex items-center justify-start w-[260px]">
-            <Link href="/" class="pl-3 min-w-[55px]">
+            <Link :href="route('posts.index')" class="pl-3 min-w-[55px]">
                 <img class="w-[40px]" src="/images/icons/FacebookLogoCircle.png">
             </Link>
             <div class="flex items-center justify-center bg-[#EFF2F5] p-1 rounded-full h-[40px] ml-2">
@@ -51,14 +51,14 @@ let showMenu = ref(false)
                         ring-0
                         focus:ring-0
                     "
-                    placeholder="Search Usarbook"
+                    placeholder="Search"
                     type="text"
                 >
             </div>
         </div>
 
         <div id="NavCenter" class="hidden lg:flex items-center ml-5 justify-center w-8/12 max-w-[600px]">
-            <Link class="w-full" href="/">
+            <Link class="w-full" :href="route('posts.index')">
                 <div
                     :class="$page.url === '/' ? 'mt-1.5' : '' "
                     class="flex items-center justify-center h-[48px] p-1 hover:bg-[#F2F2F2] w-full rounded-lg cursor-pointer"
@@ -86,8 +86,7 @@ let showMenu = ref(false)
             </button>
             <div class="flex items-center justify-center relative">
                 <button @click="showMenu = !showMenu">
-                    USARB
-<!--                    <img class="rounded-full ml-1 min-w-[40px] max-h-[40px] cursor-pointer" :src="user.image">-->
+                    <img class="rounded-full ml-1 min-w-[40px] max-h-[40px] cursor-pointer" :src="user.image">
                 </button>
                 <div
                     v-if="showMenu"
@@ -95,9 +94,8 @@ let showMenu = ref(false)
                 >
                     <Link :href="route('user.show', { id: user.id })" @click="showMenu = !showMenu">
                         <div class="flex items-center gap-3 hover:bg-gray-200 p-2 rounded-lg">
-<!--                            <img class="rounded-full ml-1 min-w-[35px] max-h-[35px] cursor-pointer" :src="user.image">-->
-<!--                            <span>{{ user.name }}</span>-->
-                            Usarbook
+                            <img class="rounded-full ml-1 min-w-[35px] max-h-[35px] cursor-pointer" :src="user.image">
+                            <span>{{ user.name }}</span>
                         </div>
                     </Link>
                     <Link
@@ -121,17 +119,17 @@ let showMenu = ref(false)
 
     <slot />
 
-<!--    <CreatePostOverlay-->
-<!--        v-if="isPostOverlay"-->
-<!--        @showModal="isPostOverlay = false"-->
-<!--    />-->
+    <CreatePostOverlay
+        v-if="isPostOverlay"
+        @showModal="isPostOverlay = false"
+    />
 
-<!--    <CropperModal-->
-<!--        v-if="isCropperModal"-->
-<!--        @showModal="isCropperModal = false"-->
-<!--    />-->
+    <CropperModal
+        v-if="isCropperModal"
+        @showModal="isCropperModal = false"
+    />
 
-<!--    <ImageDisplay-->
-<!--        v-if="isImageDisplay"-->
-<!--    />-->
+    <ImageDisplay
+        v-if="isImageDisplay"
+    />
 </template>
