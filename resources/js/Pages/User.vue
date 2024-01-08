@@ -1,19 +1,39 @@
 <script setup>
-import { Link, Head } from '@inertiajs/vue3';
+import { Link, Head, router, usePage } from '@inertiajs/vue3';
 import MainNavLayout from '@/Layouts/MainNavLayout.vue';
 import CreatePostBox from '@/Components/CreatePostBox.vue';
 import Post from '@/Components/Post.vue';
-
 import Camera from 'vue-material-design-icons/Camera.vue'
 import Pen from 'vue-material-design-icons/Pen.vue'
-
 import { useGeneralStore } from '@/stores/general';
 import { storeToRefs } from 'pinia';
-const useGeneral = useGeneralStore()
-const { isCropperModal, isImageDisplay } = storeToRefs(useGeneral)
+import {onMounted} from "vue";
 
-defineProps({ posts: Object, user: Object })
+const useGeneral = useGeneralStore();
+const { isCropperModal, isImageDisplay } = storeToRefs(useGeneral);
+const page = usePage();
+const { $inertia } = page.props;
 
+const props = defineProps({ posts: Object, user: Object, friendCount: Number });
+
+const addFriend = async () => {
+    try {
+        router.post(`/user/${props.user.id}/addFriend`);
+    } catch (error) {
+        console.error('Error adding friend:', error);
+    }
+};
+
+onMounted(async () => {
+    try {
+        const response = await router.get('/user/numberOfFriends');
+        const numberOfFriends = response;
+        // Now you can use numberOfFriends in your component
+        console.log('Number of friends:', numberOfFriends);
+    } catch (error) {
+        console.error('Error fetching number of friends:', error);
+    }
+});
 </script>
 
 <template>
@@ -44,36 +64,15 @@ defineProps({ posts: Object, user: Object })
                                 <div class="text-[28px] font-extrabold pt-1">
                                     {{ user.name }}
                                 </div>
-                                <div class="text-[17px] font-bold text-gray-600 mb-1.5 text-center md:text-left">234 friends</div>
-                                <div class="flex md:justify-start justify-center md:-ml-1">
-                                    <img
-                                        class="rounded-full -ml-1 z-[10] w-[40px] h-[40px] border-white border-2"
-                                        src="https://picsum.photos/id/141/2000/320"
-                                    >
-                                    <img
-                                        class="rounded-full -ml-3 z-[9] w-[40px] h-[40px] border-white border-2"
-                                        src="https://picsum.photos/id/142/2000/320"
-                                    >
-                                    <img
-                                        class="rounded-full -ml-3 z-[8] w-[40px] h-[40px] border-white border-2"
-                                        src="https://picsum.photos/id/143/2000/320"
-                                    >
-                                    <img
-                                        class="rounded-full -ml-3 z-[7] w-[40px] h-[40px] border-white border-2"
-                                        src="https://picsum.photos/id/144/2000/320"
-                                    >
-                                    <img
-                                        class="rounded-full -ml-3 z-[6] w-[40px] h-[40px] border-white border-2"
-                                        src="https://picsum.photos/id/145/2000/320"
-                                    >
-                                    <img
-                                        class="rounded-full -ml-3 z-[5] w-[40px] h-[40px] border-white border-2"
-                                        src="https://picsum.photos/id/146/2000/320"
-                                    >
-                                    <img
-                                        class="rounded-full -ml-3 z-[4] w-[40px] h-[40px] border-white border-2"
-                                        src="https://picsum.photos/id/147/2000/320"
-                                    >
+                                <button
+                                    v-if="$page.props.auth.user.id !== user.id && !user.isMe"
+                                    @click="addFriend"
+                                    class="w-full bg-blue-500 hover:bg-blue-600 text-white rounded-lg p-2 font-bold"
+                                >
+                                    Add Friend
+                                </button>
+                                <div class="text-[17px] font-bold text-gray-600 mb-1.5 text-center md:text-left">
+                                    {{ numberOfFriends }} friend{{ numberOfFriends !== 1 ? 's' : '' }}
                                 </div>
                             </div>
                         </div>

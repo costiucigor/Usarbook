@@ -31,7 +31,7 @@ class UserController extends Controller
 
     public function updateImage(Request $request)
     {
-        $request->validate([ 'image' => 'required|mimes:jpg,jpeg,png' ]);
+        $request->validate(['image' => 'required|mimes:jpg,jpeg,png']);
         $user = (new ImageService)->updateImage(auth()->user(), $request);
         $user->save();
     }
@@ -65,5 +65,88 @@ class UserController extends Controller
     {
         $users = User::all();
         return response()->json(['users' => $users]);
+    }
+
+    public function me()
+    {
+        $user = Auth::user();
+
+        return $this->responseHelper->successResponse(true, 'Here is the the user', $user);
+    }
+
+    public function toggleFriend($id)
+    {
+        $userFriends = auth()->user()->friends();
+
+        if ($userFriends->find($id)) {
+            $userFriends->detach([$id]);
+            return $this->responseHelper->successResponse(true, 'Removed Friend', []);
+        }
+
+        $userFriends->attach($id);
+
+        return $this->responseHelper->successResponse(true, 'Added Friend', []);
+    }
+
+    public function addFriend($id)
+    {
+        $user = auth()->user();
+
+        // Check if the user is already friends to avoid duplication
+        if ($user->friends()->where('friend_id', $id)->exists()) {
+            return response()->json(['error' => 'Already friends'], 400);
+        }
+
+        // Add the friend directly using attach
+        $user->friends()->attach($id);
+
+        // Optionally, you can load the friends relationship to include in the response
+        $user->load('friends');
+
+        return response()->json(['message' => 'Friend added successfully', 'user' => $user]);
+    }
+
+    /**
+     * @OA\Get(
+     *      path="/user/numberOfFriends",
+     *      operationId="numberOfFriends",
+     *      tags={"Users"},
+     *      summary="Get the number of friends for the authenticated user",
+     *      description="Returns the number of friends for the authenticated user.",
+     *      security={
+     *          {"sanctum": {}}
+     *      },
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="numberOfFriends", type="integer"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=401,
+     *          description="Unauthenticated",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(property="error", type="string", example="Unauthenticated."),
+     *          )
+     *      )
+     * )
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function numberOfFriends(Request $request)
+    {
+        $user = $request->user();
+        $friendCount = $user->friends()->count();
+
+        return response()->json(['numberOfFriends' => $friendCount]);
+    }
+    public function getFriends()
+    {
+        $userFriends = auth()->user()->friends()->get();
+        return $this->responseHelper->successResponse(true, 'All Friends', $userFriends);
     }
 }

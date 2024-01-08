@@ -20,9 +20,12 @@ use Inertia\Inertia;
 */
 
 Route::middleware('auth')->group(function () {
-    Route::post('/friend-request/{recipient}', [FriendController::class, 'sendFriendRequest'])->name('friend.request');
-    Route::post('/friend-accept/{sender}', [FriendController::class, 'acceptFriendRequest'])->name('friend.accept');
-    Route::get('/friends', [FriendController::class, 'showFriends'])->name('friends.index');
+    Route::get('/api/user/me', function () {
+        return auth()->user();
+    });
+
+    Route::post('/user/{user}/addFriend', [UserController::class, 'addFriend'])->name('user.addFriend');
+    Route::get('/user/numberOfFriends', [UserController::class, 'numberOfFriends'])->name('user.numberOfFriends');
 
     Route::get('/', [PostController::class, 'index'])->name('posts.index');
     Route::post('/post', [PostController::class, 'store'])->name('post.store');

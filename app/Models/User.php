@@ -54,8 +54,18 @@ class User extends Authenticatable
         return $this->hasMany(Comment::class);
     }
 
-    public function friends(): BelongsToMany
+    public function friends()
     {
-        return $this->belongsToMany(User::class, 'friends', 'user_id', 'friend_id')->withTimestamps();
+        return $this->belongsToMany(User::class, 'friend_user', 'user_id', 'friend_id');
+    }
+    public function toArray()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'image' => $this->image,
+            'email' => $this->email,
+            'friends' => $this->friends
+        ];
     }
 }
